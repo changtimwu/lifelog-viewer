@@ -1,0 +1,44 @@
+{
+  "id": "switzerland-2026",
+  "title": "Switzerland",
+  "place": "Naturfreundenhaus, Tschiemen 755, 3804 Habkern",
+  "country": "瑞士",
+  "playbackSeconds": 296,
+  "days": [
+    {
+      "day": 4,
+      "date": "2026-07-13",
+      "events": [
+        { "time": "09:12", "category": "scenic", "text": "到達景點福克拉山口", "lng": 8.4150, "lat": 46.5720 },
+        { "time": "10:04", "category": "rest", "text": "在錫永市區稍作停留，喘口氣", "lng": 7.3590, "lat": 46.2330 },
+        { "time": "11:43", "category": "rest", "text": "搭車穿越勒奇山隧道，順便歇歇腳", "lng": 7.7300, "lat": 46.4200 },
+        { "time": "12:32", "category": "scenic", "text": "到達景點藍湖", "lng": 7.7230, "lat": 46.5310 },
+        { "time": "16:24", "category": "scenic", "text": "到達景點哈布克恩", "lng": 7.8710, "lat": 46.7510 },
+        { "time": "17:19", "category": "rest", "text": "在因特拉肯短暫停留", "lng": 7.8630, "lat": 46.6860 },
+        { "time": "17:57", "category": "rest", "text": "到龍讓湖邊走走，順便休息", "lng": 7.7000, "lat": 46.6800 },
+        { "time": "19:48", "category": "lodging", "text": "回到民宿休息", "lng": 7.8690, "lat": 46.7500 }
+      ]
+    },
+    {
+      "day": 5,
+      "date": "2026-07-14",
+      "events": [
+        { "time": "08:09", "category": "scenic", "text": "到達景點圖恩湖畔", "lng": 7.7000, "lat": 46.7000 }
+      ]
+    }
+  ],
+  "samples": [
+    { "t": "2026-07-13T09:00:00", "lng": 8.4150, "lat": 46.5720, "alt": 2106, "tempC": 12.4, "humidityPct": 60, "pressureHpa": 1012.0, "movedKm": 690.0, "walkKm": 17.4 },
+    { "t": "2026-07-13T09:12:00", "lng": 8.4120, "lat": 46.5710, "alt": 2090, "tempC": 12.8, "humidityPct": 59, "pressureHpa": 1012.5, "movedKm": 691.2, "walkKm": 17.6 },
+    { "t": "2026-07-13T10:04:00", "lng": 7.3590, "lat": 46.2330, "alt": 512, "tempC": 26.5, "humidityPct": 38, "pressureHpa": 1014.0, "movedKm": 758.0, "walkKm": 18.0 },
+    { "t": "2026-07-13T11:43:00", "lng": 7.7300, "lat": 46.4200, "alt": 1200, "tempC": 19.0, "humidityPct": 55, "pressureHpa": 1015.0, "movedKm": 780.0, "walkKm": 18.2 },
+    { "t": "2026-07-13T12:32:00", "lng": 7.7230, "lat": 46.5310, "alt": 887, "tempC": 22.0, "humidityPct": 50, "pressureHpa": 1015.0, "movedKm": 786.0, "walkKm": 18.7 },
+    { "t": "2026-07-13T14:30:00", "lng": 7.8000, "lat": 46.6200, "alt": 1000, "tempC": 24.0, "humidityPct": 47, "pressureHpa": 1015.5, "movedKm": 795.0, "walkKm": 19.2 },
+    { "t": "2026-07-13T16:24:00", "lng": 7.8710, "lat": 46.7510, "alt": 1120, "tempC": 24.9, "humidityPct": 46, "pressureHpa": 1015.0, "movedKm": 804.0, "walkKm": 19.6 },
+    { "t": "2026-07-13T16:50:26", "lng": 7.8760, "lat": 46.7530, "alt": 1173, "tempC": 24.6, "humidityPct": 47.0, "pressureHpa": 1016.0, "movedKm": 805.82, "walkKm": 19.97 },
+    { "t": "2026-07-13T17:19:00", "lng": 7.8630, "lat": 46.6860, "alt": 567, "tempC": 26.0, "humidityPct": 44, "pressureHpa": 1016.0, "movedKm": 809.0, "walkKm": 20.1 },
+    { "t": "2026-07-13T17:57:00", "lng": 7.7000, "lat": 46.6800, "alt": 560, "tempC": 25.2, "humidityPct": 48, "pressureHpa": 1016.0, "movedKm": 812.5, "walkKm": 20.5 },
+    { "t": "2026-07-13T19:48:00", "lng": 7.8690, "lat": 46.7500, "alt": 1150, "tempC": 21.0, "humidityPct": 52, "pressureHpa": 1017.0, "movedKm": 815.0, "walkKm": 20.7 },
+    { "t": "2026-07-14T08:09:00", "lng": 7.7000, "lat": 46.7000, "alt": 560, "tempC": 18.5, "humidityPct": 58, "pressureHpa": 1018.0, "movedKm": 820.0, "walkKm": 20.9 }
+  ]
+}

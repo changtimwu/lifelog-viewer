@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+
+/* Huninn 粉圓 — rounded Traditional-Chinese gothic. Falls back to Noto Sans TC
+   if this CDN font can't load. */
+@font-face {
+  font-family: 'Huninn';
+  src: url('https://cdn.jsdelivr.net/gh/justfont/open-huninn-font@2.0/font/jf-openhuninn-2.0.ttf') format('truetype');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #E4DECF;
+}
+
+.lv-page {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.lv-shell {
+  width: 100%;
+  max-width: 1140px;
+  background: #151513;
+  border-radius: 24px;
+  padding: 14px;
+  color: #2A2A26;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .35), 0 4px 12px rgba(0, 0, 0, .2);
+}
+
+/* Map card */
+.lv-map-card {
+  position: relative;
+  flex: 1 1 56%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .04);
+}
+
+.lv-map-wrap { position: relative; width: 100%; height: 480px; }
+.lv-map { position: absolute; inset: 0; }
+
+/* Soft mint wash to pull the OSM/vector basemap toward the design palette.
+   Tune or remove to taste. */
+.lv-map-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 120% at 45% 40%, rgba(231, 239, 226, .28), rgba(211, 228, 210, .40));
+  mix-blend-mode: multiply;
+}
+
+.lv-pin { cursor: default; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .3)); }
+
+.lv-address {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  max-width: 72%;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: #1C1C1A;
+  color: #F3ECDF;
+  font-family: 'Fredoka', 'Huninn', 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .25);
+  z-index: 2;
+}
+
+/* Micro-interactions */
+.lv-stat { transition: transform .15s ease; }
+.lv-stat:hover { transform: translateY(-2px); }
+.lv-btn:focus-visible { outline: 2px solid #E8503A; outline-offset: 3px; }
+
+/* Trim MapLibre's default control chrome so it fits the aesthetic */
+.maplibregl-ctrl-attrib { font-size: 9px; opacity: .7; }
+.maplibregl-ctrl-logo { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lv-stat { transition: none; }
+}
