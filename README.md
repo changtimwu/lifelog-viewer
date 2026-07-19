@@ -55,10 +55,13 @@ src/
   lib/
     time.js              timestamp parsing + clock/duration formatting
     geo.js               route coords + time-based interpolation
+    gpx.js               GPX track -> samples[] / trip (import helper)
   data/
     useTrip.js           loads + derives a trip (route, time range, events)
 public/data/
     trip-switzerland.json  sample trip (swap for real data)
+scripts/
+    gpx-to-trip.mjs        CLI: convert a .gpx file into a trip JSON
 ```
 
 ## Data schema
@@ -95,11 +98,37 @@ events, and a `samples[]` GPS+sensor track. The playhead interpolates across
 `category` is one of `scenic` / `rest` / `lodging` (mapped to 景點 / 休息 / 住宿
 in `theme.js` — add your own there).
 
+## Importing a GPX track
+
+Turn a real recorded track into a trip JSON with the bundled converter:
+
+```bash
+node scripts/gpx-to-trip.mjs my-hike.gpx --tz=+02:00 \
+  --title="Switzerland" --place="Habkern" --country="瑞士" --walk-as-moved \
+  --out public/data/my-trip.json
+# then load it: useTrip("/data/my-trip.json")
+```
+
+GPX only carries position, elevation, time, and (via the Garmin
+TrackPointExtension) air temperature, so the converter fills the rest of each
+sample: `movedKm` is the cumulative great-circle distance, `pressureHpa` is
+derived from altitude, and `tempC` / `humidityPct` fall back to constants you
+can override. Timeline `events` aren't in a GPX track, so `days[].events` start
+empty — add them afterwards.
+
+**Times are the one gotcha.** GPX timestamps are UTC, but the app reads sample
+times as *local* wall-clock (see [Data schema](#data-schema) / `lib/time.js`).
+Pass `--tz` with the trip's local offset (e.g. `+02:00` for CEST) so the header
+clock reads local time. Run with `--help` for all flags. The parsing itself
+lives in `src/lib/gpx.js` (`gpxToSamples` / `gpxToTrip`) and has no
+dependencies, so you can call it from the browser too.
+
 ## Where to take it next
 
-- **Ingest real data.** Parse GPX/FIT tracks into `samples[]`; pull timeline
-  events from photos, calendar, or notes. Replace the static fetch in
-  `useTrip.js` with an API call.
+- **Ingest real data.** GPX tracks import via `scripts/gpx-to-trip.mjs` (see
+  above); extend `src/lib/gpx.js` for FIT or other formats. Pull timeline events
+  from photos, calendar, or notes. Replace the static fetch in `useTrip.js` with
+  an API call.
 - **Multiple trips.** Add a trip picker; `useTrip(url)` already takes a URL.
 - **Backend + persistence.** Store trips in a DB; add auth so it's per-user.
 - **Traveled vs. remaining route.** Split the route line into a solid
