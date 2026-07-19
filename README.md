@@ -6,6 +6,8 @@ the route, the stat readouts interpolate, and the timeline reveals events as you
 pass them. Scrub the bottom bar (or hit play) to move through the journey like a
 video.
 
+![Lifelog Viewer replaying a day of a Switzerland trip](docs/screenshot.png)
+
 Ported from a self-contained prototype into a real Vite + React app so it can
 grow into a service: real map tiles (MapLibre GL), a proper data layer, and a
 normal build/deploy pipeline.
