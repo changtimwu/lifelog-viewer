@@ -5,7 +5,7 @@ const Divider = () => (
   <span style={{ width: 1, height: 14, background: "#3a3a35", display: "inline-block" }} />
 );
 
-export default function Header({ day, date, clock }) {
+export default function Header({ day, date, clock, tools }) {
   return (
     <header
       style={{
@@ -26,14 +26,17 @@ export default function Header({ day, date, clock }) {
           </div>
         </div>
       </div>
-      <div style={{ display: "flex", alignItems: "center", fontFamily: MONO, color: "#EDE7DA", fontSize: 12.5 }}>
-        <span style={{ padding: "0 16px", color: "#cfc9bb" }}>
-          第 <b style={{ color: C.paper }}>{day}</b> 天
-        </span>
-        <Divider />
-        <span style={{ padding: "0 16px" }}>{date}</span>
-        <Divider />
-        <span style={{ padding: "0 16px", minWidth: 78, textAlign: "center" }}>{clock}</span>
+      <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+        {tools}
+        <div style={{ display: "flex", alignItems: "center", fontFamily: MONO, color: "#EDE7DA", fontSize: 12.5 }}>
+          <span style={{ padding: "0 16px", color: "#cfc9bb" }}>
+            第 <b style={{ color: C.paper }}>{day}</b> 天
+          </span>
+          <Divider />
+          <span style={{ padding: "0 16px" }}>{date}</span>
+          <Divider />
+          <span style={{ padding: "0 16px", minWidth: 78, textAlign: "center" }}>{clock}</span>
+        </div>
       </div>
     </header>
   );

@@ -121,6 +121,17 @@ function parseTrackpoints(gpx) {
   return pts;
 }
 
+// Parse a timezone offset into minutes east of UTC. Accepts "+02:00", "-0130",
+// or a bare minute count ("120"). Returns 0 for null/empty.
+export function tzOffsetToMinutes(tz) {
+  if (tz == null || tz === "") return 0;
+  if (/^[+-]?\d+$/.test(String(tz).trim())) return parseInt(tz, 10);
+  const m = String(tz).trim().match(/^([+-])(\d{2}):?(\d{2})$/);
+  if (!m) throw new Error(`Bad timezone offset "${tz}" (use ±HH:MM or minutes).`);
+  const mins = parseInt(m[2], 10) * 60 + parseInt(m[3], 10);
+  return m[1] === "-" ? -mins : mins;
+}
+
 export const DEFAULTS = {
   tzOffsetMinutes: 0, // UTC -> local shift applied to every timestamp
   tempC: 0, // used for points with no <atemp>

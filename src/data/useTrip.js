@@ -2,15 +2,24 @@ import { useEffect, useState, useMemo } from "react";
 import { toMs, eventMs } from "../lib/time.js";
 import { routeCoords } from "../lib/geo.js";
 
-// Loads a trip from /public/data. Swap the URL (or fetch from an API) to
-// load real lifelog data — the shape is documented in README.md.
-export function useTrip(url = "/data/trip-switzerland.json") {
+// Loads a trip. `source` is either a JSON URL string (fetched from /public/data
+// or an API) or an already-built trip object (e.g. from importing a GPX with
+// lib/gpx.js). The shape is documented in README.md.
+export function useTrip(source = "/data/trip-switzerland.json") {
   const [trip, setTrip] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    setError(null);
+    // In-memory trip object: use it directly, no fetch.
+    if (source && typeof source === "object") {
+      setTrip(source);
+      return;
+    }
+    // URL: fetch and parse JSON.
     let alive = true;
-    fetch(url)
+    setTrip(null);
+    fetch(source)
       .then((r) => {
         if (!r.ok) throw new Error(`Failed to load trip (${r.status})`);
         return r.json();
@@ -20,7 +29,7 @@ export function useTrip(url = "/data/trip-switzerland.json") {
     return () => {
       alive = false;
     };
-  }, [url]);
+  }, [source]);
 
   const derived = useMemo(() => {
     if (!trip) return null;

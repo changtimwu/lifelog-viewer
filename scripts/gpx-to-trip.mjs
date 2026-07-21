@@ -18,7 +18,7 @@
 //   --out <file>              write here instead of stdout
 
 import { readFileSync, writeFileSync } from "node:fs";
-import { gpxToTrip } from "../src/lib/gpx.js";
+import { gpxToTrip, tzOffsetToMinutes } from "../src/lib/gpx.js";
 
 function parseArgs(argv) {
   const flags = {};
@@ -38,16 +38,6 @@ function parseArgs(argv) {
   return { input, flags };
 }
 
-// "+02:00" / "-0130" / "120" (minutes) -> minutes east of UTC.
-function tzToMinutes(tz) {
-  if (tz == null) return 0;
-  if (/^[+-]?\d+$/.test(String(tz))) return parseInt(tz, 10);
-  const m = String(tz).match(/^([+-])(\d{2}):?(\d{2})$/);
-  if (!m) throw new Error(`Bad --tz "${tz}" (use ±HH:MM or minutes).`);
-  const mins = parseInt(m[2], 10) * 60 + parseInt(m[3], 10);
-  return m[1] === "-" ? -mins : mins;
-}
-
 const USAGE =
   "Usage: node scripts/gpx-to-trip.mjs <track.gpx> [--tz=±HH:MM] [--title=..] " +
   "[--id=..] [--place=..] [--country=..] [--playback=<sec>] [--temp=<°C>] " +
@@ -61,24 +51,24 @@ if (!input || flags.help) {
 
 const gpx = readFileSync(input, "utf8");
 
-const opts = {
-  tzOffsetMinutes: tzToMinutes(flags.tz),
-  walkAsMoved: !!flags["walk-as-moved"],
-};
-if (flags.temp != null) opts.tempC = parseFloat(flags.temp);
-if (flags.humidity != null) opts.humidityPct = parseFloat(flags.humidity);
-if (flags.pressure != null) opts.pressureHpa = parseFloat(flags.pressure);
-
-const meta = {
-  id: flags.id,
-  title: flags.title,
-  place: flags.place,
-  country: flags.country,
-  playbackSeconds: flags.playback != null ? parseInt(flags.playback, 10) : undefined,
-};
-
 let trip;
 try {
+  const opts = {
+    tzOffsetMinutes: tzOffsetToMinutes(flags.tz),
+    walkAsMoved: !!flags["walk-as-moved"],
+  };
+  if (flags.temp != null) opts.tempC = parseFloat(flags.temp);
+  if (flags.humidity != null) opts.humidityPct = parseFloat(flags.humidity);
+  if (flags.pressure != null) opts.pressureHpa = parseFloat(flags.pressure);
+
+  const meta = {
+    id: flags.id,
+    title: flags.title,
+    place: flags.place,
+    country: flags.country,
+    playbackSeconds: flags.playback != null ? parseInt(flags.playback, 10) : undefined,
+  };
+
   trip = gpxToTrip(gpx, meta, opts);
 } catch (e) {
   console.error(`gpx-to-trip: ${e.message}`);

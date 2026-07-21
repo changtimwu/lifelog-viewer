@@ -77,6 +77,13 @@ body {
 .lv-stat:hover { transform: translateY(-2px); }
 .lv-btn:focus-visible { outline: 2px solid #E8503A; outline-offset: 3px; }
 
+/* GPX import control */
+.lv-import-btn { transition: background .15s ease, border-color .15s ease; }
+.lv-import-btn:hover { background: rgba(255, 255, 255, .14) !important; border-color: rgba(255, 255, 255, .3) !important; }
+.lv-import-load { transition: filter .15s ease; }
+.lv-import-load:hover:not(:disabled) { filter: brightness(1.06); }
+.lv-import-load:disabled { opacity: .5; cursor: default; }
+
 /* Trim MapLibre's default control chrome so it fits the aesthetic */
 .maplibregl-ctrl-attrib { font-size: 9px; opacity: .7; }
 .maplibregl-ctrl-logo { display: none !important; }

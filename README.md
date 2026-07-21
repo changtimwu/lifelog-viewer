@@ -51,6 +51,7 @@ src/
     StatColumn.jsx       six stat pills (interpolated values)
     Timeline.jsx         event list with day dividers + active/faded states
     PlayerBar.jsx        play/pause/stop + draggable seek rail
+    GpxImport.jsx        header control: import a GPX by upload or URL
     Spiral.jsx           logo mark
   lib/
     time.js              timestamp parsing + clock/duration formatting
@@ -100,7 +101,16 @@ in `theme.js` — add your own there).
 
 ## Importing a GPX track
 
-Turn a real recorded track into a trip JSON with the bundled converter:
+Two ways to bring in a real recorded track.
+
+**In the app.** Click **＋ 匯入 GPX** in the header and either upload a `.gpx`
+file or paste a link to one. The track is parsed in the browser and replayed
+immediately — no server round-trip. Set the **時區 (timezone)** offset so the
+header clock reads local time (it defaults to your browser's zone). A pasted
+link must be same-origin or CORS-enabled, or the fetch is blocked.
+
+**On the command line.** Turn a track into a trip JSON with the bundled
+converter:
 
 ```bash
 node scripts/gpx-to-trip.mjs my-hike.gpx --tz=+02:00 \

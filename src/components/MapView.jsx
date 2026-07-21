@@ -21,6 +21,21 @@ const mapStyle = KEY
       layers: [{ id: "osm", type: "raster", source: "osm" }],
     };
 
+const lineFeature = (route) => ({
+  type: "Feature",
+  geometry: { type: "LineString", coordinates: route },
+});
+
+// Frame the whole route in view (used when a new trip is imported).
+function fitToRoute(map, route) {
+  if (!route || route.length < 2) return;
+  const b = route.reduce(
+    (bb, c) => bb.extend(c),
+    new maplibregl.LngLatBounds(route[0], route[0])
+  );
+  map.fitBounds(b, { padding: 48, duration: 700, maxZoom: 14 });
+}
+
 function makePin() {
   const el = document.createElement("div");
   el.className = "lv-pin";
@@ -37,6 +52,9 @@ export default function MapView({ route, position, following }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
+  const routeRef = useRef(route);
+  routeRef.current = route;
+  const firstRouteRef = useRef(true);
 
   // Create the map once.
   useEffect(() => {
@@ -50,10 +68,7 @@ export default function MapView({ route, position, following }) {
     mapRef.current = map;
 
     map.on("load", () => {
-      map.addSource("route", {
-        type: "geojson",
-        data: { type: "Feature", geometry: { type: "LineString", coordinates: route } },
-      });
+      map.addSource("route", { type: "geojson", data: lineFeature(routeRef.current) });
       map.addLayer({
         id: "route-line",
         type: "line",
@@ -70,6 +85,25 @@ export default function MapView({ route, position, following }) {
     return () => map.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Redraw the route line + refit when the trip (route) changes. The initial
+  // route keeps the designed center/zoom; later changes (imports) fit the view.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (firstRouteRef.current) {
+      firstRouteRef.current = false;
+      return;
+    }
+    const draw = () => {
+      const src = map.getSource("route");
+      if (!src) return;
+      src.setData(lineFeature(route));
+      fitToRoute(map, route);
+    };
+    if (map.getSource("route")) draw();
+    else map.once("load", draw);
+  }, [route]);
 
   // Move the pin (and gently follow it while playing) as the playhead moves.
   useEffect(() => {
