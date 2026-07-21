@@ -84,6 +84,74 @@ body {
 .lv-import-load:hover:not(:disabled) { filter: brightness(1.06); }
 .lv-import-load:disabled { opacity: .5; cursor: default; }
 
+/* Photo markers on the map */
+.lv-photo-pin {
+  width: 46px;
+  height: 46px;
+  border-radius: 9px;
+  overflow: hidden;
+  border: 2.5px solid #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .35);
+  cursor: pointer;
+  background: #fff;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.lv-photo-pin img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  image-orientation: from-image; /* honour EXIF orientation */
+}
+.lv-photo-pin:hover { transform: scale(1.08); }
+.lv-photo-pin.is-active {
+  transform: scale(1.22);
+  border-color: #D6459A;
+  box-shadow: 0 6px 16px rgba(214, 69, 154, .45);
+  z-index: 3;
+}
+
+/* Photo thumbnail in the timeline */
+.lv-tl-photo {
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  flex: none;
+  image-orientation: from-image;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .18);
+}
+
+/* Full-size photo viewer */
+.lv-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(10, 9, 8, .82);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px;
+  cursor: zoom-out;
+}
+.lv-lightbox img {
+  max-width: min(92vw, 1100px);
+  max-height: 82vh;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .6);
+  cursor: default;
+  image-orientation: from-image;
+}
+.lv-lightbox-cap {
+  font-family: 'Fredoka', 'Huninn', 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  color: #F3ECDF;
+  cursor: default;
+}
+
 /* Trim MapLibre's default control chrome so it fits the aesthetic */
 .maplibregl-ctrl-attrib { font-size: 9px; opacity: .7; }
 .maplibregl-ctrl-logo { display: none !important; }

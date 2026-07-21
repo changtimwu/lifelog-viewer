@@ -48,13 +48,39 @@ function makePin() {
   return el;
 }
 
-export default function MapView({ route, position, following }) {
+function makePhotoPin(photo, onClick) {
+  const el = document.createElement("div");
+  el.className = "lv-photo-pin";
+  const img = document.createElement("img");
+  img.src = photo.url;
+  img.alt = photo.name || "";
+  el.appendChild(img);
+  el.addEventListener("click", (e) => {
+    e.stopPropagation();
+    onClick(photo);
+  });
+  return el;
+}
+
+export default function MapView({
+  route,
+  position,
+  following,
+  photos = [],
+  activePhotoId = null,
+  onPhotoClick,
+}) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const routeRef = useRef(route);
   routeRef.current = route;
   const firstRouteRef = useRef(true);
+  // Latest click handler, read at click time so the marker sync effect doesn't
+  // depend on the (inline) callback's identity.
+  const onPhotoClickRef = useRef(onPhotoClick);
+  onPhotoClickRef.current = onPhotoClick;
+  const photoMarkersRef = useRef(new Map()); // id -> { marker, el }
 
   // Create the map once.
   useEffect(() => {
@@ -112,6 +138,37 @@ export default function MapView({ route, position, following }) {
       mapRef.current.easeTo({ center: position, duration: 500 });
     }
   }, [position, following]);
+
+  // Sync photo thumbnail markers with the `photos` list.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const store = photoMarkersRef.current;
+    const next = new Set(photos.map((p) => p.id));
+    // Drop markers for photos that are gone.
+    for (const [id, { marker }] of store) {
+      if (!next.has(id)) {
+        marker.remove();
+        store.delete(id);
+      }
+    }
+    // Add markers for new photos.
+    for (const photo of photos) {
+      if (store.has(photo.id)) continue;
+      const el = makePhotoPin(photo, (p) => onPhotoClickRef.current?.(p));
+      const marker = new maplibregl.Marker({ element: el, anchor: "center" })
+        .setLngLat([photo.lng, photo.lat])
+        .addTo(map);
+      store.set(photo.id, { marker, el });
+    }
+  }, [photos]);
+
+  // Highlight the photo nearest the playhead.
+  useEffect(() => {
+    for (const [id, { el }] of photoMarkersRef.current) {
+      el.classList.toggle("is-active", id === activePhotoId);
+    }
+  }, [activePhotoId, photos]);
 
   return (
     <div className="lv-map-wrap">

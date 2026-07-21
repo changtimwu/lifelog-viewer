@@ -24,6 +24,24 @@ export function positionAt(samples, ms) {
   return [lerp(samples[i].lng, samples[j].lng, f), lerp(samples[i].lat, samples[j].lat, f)];
 }
 
+// The track sample closest to a [lng, lat] point (squared degrees — fine for
+// nearest-neighbour over a single trip's extent). Used to time-place a photo
+// that carries GPS but no capture time.
+export function nearestSample(samples, lng, lat) {
+  let best = samples[0];
+  let bestD = Infinity;
+  for (const s of samples) {
+    const dx = s.lng - lng;
+    const dy = s.lat - lat;
+    const d = dx * dx + dy * dy;
+    if (d < bestD) {
+      bestD = d;
+      best = s;
+    }
+  }
+  return best;
+}
+
 // Interpolated sensor/stat values at time `ms`.
 export function sampleAt(samples, ms) {
   const { i, j, f } = bracket(samples, ms);

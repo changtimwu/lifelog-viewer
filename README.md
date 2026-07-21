@@ -52,11 +52,13 @@ src/
     Timeline.jsx         event list with day dividers + active/faded states
     PlayerBar.jsx        play/pause/stop + draggable seek rail
     GpxImport.jsx        header control: import a GPX by upload or URL
+    PhotoImport.jsx      header control: add photos (placed by EXIF)
     Spiral.jsx           logo mark
   lib/
     time.js              timestamp parsing + clock/duration formatting
     geo.js               route coords + time-based interpolation
     gpx.js               GPX track -> samples[] / trip (import helper)
+    exif.js              read photo capture time + GPS from EXIF
   data/
     useTrip.js           loads + derives a trip (route, time range, events)
 public/data/
@@ -99,9 +101,9 @@ events, and a `samples[]` GPS+sensor track. The playhead interpolates across
 `category` is one of `scenic` / `rest` / `lodging` (mapped to 景點 / 休息 / 住宿
 in `theme.js` — add your own there).
 
-## Importing a GPX track
+## Importing your own data
 
-Two ways to bring in a real recorded track.
+### GPX track
 
 **In the app.** Click **＋ 匯入 GPX** in the header and either upload a `.gpx`
 file or paste a link to one. The track is parsed in the browser and replayed
@@ -132,6 +134,23 @@ Pass `--tz` with the trip's local offset (e.g. `+02:00` for CEST) so the header
 clock reads local time. Run with `--help` for all flags. The parsing itself
 lives in `src/lib/gpx.js` (`gpxToSamples` / `gpxToTrip`) and has no
 dependencies, so you can call it from the browser too.
+
+### Photos
+
+Click **＋ 照片** in the header to add photos to the current trip (parsed in the
+browser — nothing is uploaded anywhere). Each photo is placed from its EXIF:
+
+- **GPS + capture time** → a thumbnail pin on the map and a timeline entry.
+- **Time but no GPS** → positioned on the track by matching its capture time
+  (`positionAt`).
+- **GPS but no time** → time-placed at the nearest track point (`nearestSample`).
+- **Neither** → dropped at the trip start.
+
+The photo nearest the playhead is highlighted on the map and in the timeline;
+click any photo to open it full-size. Photos are cleared when you load a
+different trip. EXIF `DateTimeOriginal` is camera-local wall-clock, so it lines
+up with the track when both are in the same local zone. Parsing lives in
+`src/lib/exif.js` (`readPhotoMeta`) and has no dependencies.
 
 ## Where to take it next
 
